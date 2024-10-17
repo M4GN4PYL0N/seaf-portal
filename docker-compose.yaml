@@ -54,8 +54,6 @@ services:
   reverse-proxy:
     container_name: reverse-proxy
     image: nginx
-    build:
-      context: reverse-proxy
     env_file:
       - ./reverse-proxy/env/nginx.env
     ports:
