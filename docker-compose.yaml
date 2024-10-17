@@ -23,7 +23,8 @@ services:
     ports:
       - "8080:3030"
     volumes:
-      - /var/archportal:/var/www/public/workspace:ro
+      - /var/archportal/workspace:/var/www/public/workspace:ro
+      - /var/archportal/roles:/var/www/public/roles:ro
 
 #  seaf-frontend:
 #    container_name: seaf-frontend
