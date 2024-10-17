@@ -1,12 +1,12 @@
 #version: '1'
 services:
   seaf-backend:
-    image: archportal:v1
-#    build:
-#      context: seaf-backend
-#      dockerfile: Dockerfile
-#      args:
-#        DOCKER_BUILDKIT: 0
+    container_name: archportal
+    build:
+      context: seaf-backend
+      dockerfile: Dockerfile
+      args:
+        DOCKER_BUILDKIT: 0
     environment:
       VUE_APP_DOCHUB_MODE: backend
       VUE_APP_DOCHUB_BACKEND_PORT: 3030
