@@ -1,7 +1,6 @@
 #version: '1'
 services:
   seaf-backend:
-    container_name: archportal
     build:
       context: seaf-backend
       dockerfile: Dockerfile
