@@ -1,0 +1,10 @@
+.idea
+.vscode
+.git
+.gitlab-ci.yml
+Dockerfile
+docker-compose*.yaml
+node_modules
+dist
+.github
+pics

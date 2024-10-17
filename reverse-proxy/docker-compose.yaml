@@ -1,0 +1,12 @@
+services:
+  nginx-proxy:
+    container_name: reverse-proxy
+    image: nginx
+    env_file:
+      - ./env/nginx.env
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./templates:/etc/nginx/templates
+      - ./pki:/etc/nginx/pki

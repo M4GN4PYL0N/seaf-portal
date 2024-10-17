@@ -1,0 +1,6 @@
+[submodule "seaf-backend/seaf-archtool-core"]
+	path = seaf-backend/seaf-archtool-core
+	url = https://gitverse.ru/seafteam/seaf-archtool-core.git
+[submodule "seaf-frontend/seaf-archtool-core"]
+	path = seaf-frontend/seaf-archtool-core
+	url = https://gitverse.ru/seafteam/seaf-archtool-core.git
