@@ -1,6 +1,7 @@
 #version: '1'
 services:
   seaf-backend:
+    container_name: seaf-backend
     build:
       context: seaf-backend
       dockerfile: Dockerfile
