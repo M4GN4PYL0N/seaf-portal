@@ -4,7 +4,9 @@ upstream dochub {
 upstream plantuml {
    server archportal.local:8079;
 }
-
+upstream keycloak {
+   server archaaa.local:8081;
+}
 server {
    listen ${NGINX_PORT};
    server_name ${NGINX_HOST};
@@ -25,5 +27,24 @@ server {
   }
   location /svg/ {
     proxy_pass http://plantuml;
+  }
+}
+
+server {
+   listen ${NGINX_PORT};
+   server_name archaaa.local;
+   return 301 https://$server_name$request_uri;
+}
+server {
+
+  listen ${NGINX_TLSPORT} ssl;
+  server_name archaaa.local;
+
+  ssl_certificate /etc/nginx/pki/server.crt;
+  ssl_certificate_key /etc/nginx/pki/server.key;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+  location / {
+    proxy_pass http://keycloak;
   }
 }
