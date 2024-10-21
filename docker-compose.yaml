@@ -40,11 +40,11 @@ services:
 #    ports:
 #      - "8080:80"
 
-  plantuml:
-    container_name: plantuml
-    image: seaf/plantuml-server:jetty
-    ports:
-      - "8079:8080"
+#  plantuml:
+#    container_name: plantuml
+#    image: seaf/plantuml-server:jetty
+#    ports:
+#      - "8079:8080"
 
   reverse-proxy:
     container_name: reverse-proxy
