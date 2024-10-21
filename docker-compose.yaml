@@ -21,7 +21,7 @@ services:
       - "8080:3030"
     volumes:
       - /var/archportal/workspace:/var/www/public/workspace:ro
-      - /var/archportal/roles:/var/www/public/workspace/roles:ro
+#      - /var/archportal/roles:/var/www/public/roles:ro
 
 #  seaf-frontend:
 #    container_name: seaf-frontend
