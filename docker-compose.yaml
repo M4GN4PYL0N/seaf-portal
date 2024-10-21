@@ -14,7 +14,6 @@ services:
       VUE_APP_DOCHUB_ROOT_MANIFEST: workspace/root.yaml
       VUE_APP_DOCHUB_APPEND_DOCHUB_DOCS: n
       VUE_APP_PLANTUML_SERVER: archportal.local/svg/
-
     env_file:
       - ./seaf-backend/.env
     ports:
