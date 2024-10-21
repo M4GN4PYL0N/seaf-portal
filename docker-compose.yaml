@@ -8,6 +8,7 @@ services:
       args:
         DOCKER_BUILDKIT: 0
     environment:
+      VUE_APP_DOCHUB_ROLES_MODEL: y
       VUE_APP_DOCHUB_MODE: backend
       VUE_APP_DOCHUB_BACKEND_PORT: 3030
       VUE_APP_DOCHUB_METAMODEL: metamodel/root.yaml
