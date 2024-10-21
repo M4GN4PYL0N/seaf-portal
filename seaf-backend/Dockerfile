@@ -17,7 +17,7 @@ COPY seaf-archtool-core .
 COPY --from=deps /var/www/plugins ./plugins/
 ENV NODE_ENV=production
 ENV VUE_APP_DOCHUB_MODE=backend
-ENV VUE_APP_DOCHUB_ROLES_MODEL = y
+ENV VUE_APP_DOCHUB_ROLES_MODEL=y
 # RUN --mount=type=cache,target=./node_modules/.cache npm run build
 RUN npm run build
 CMD ["node", "src/backend/main.mjs"]
