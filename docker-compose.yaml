@@ -15,7 +15,7 @@ services:
       VUE_APP_PLANTUML_SERVER: archportal.local/svg/
       VUE_APP_DOCHUB_ROLES: file:///roles/roles.yaml
       VUE_APP_DOCHUB_GITLAB_URL: http://archgitlab.local:8929/architecture/
-      VUE_APP_DOCHUB_ROOT_MANIFEST: gitlab:seaf:main@root.yaml
+      VUE_APP_DOCHUB_ROOT_MANIFEST: 'gitlab:seaf:main@root.yaml'
       VUE_APP_DOCHUB_PERSONAL_TOKEN: glpat-aK63GG4xZFxWcyFM2ixn
 #      VUE_APP_DOCHUB_AUTHORITY_SERVER: http://archaaa.local:8081/realms/archportal
 #      VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID: archportal
