@@ -34,8 +34,8 @@ services:
     networks:
       - application
     volumes:
-      - ../certs/server.crt:/opt/keycloak/conf/server.crt:ro
-      - ../certs/server.key:/opt/keycloak/conf/server.key:ro
+      - ./certs/server.crt:/opt/keycloak/conf/server.crt:ro
+      - ./certs/server.key:/opt/keycloak/conf/server.key:ro
 
 networks:
   application:
