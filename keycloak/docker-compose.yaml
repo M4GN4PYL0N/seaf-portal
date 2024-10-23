@@ -17,6 +17,7 @@ services:
       -  '127.0.0.1:5432:5432'
     networks:
       - application
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -24,13 +25,17 @@ services:
     env_file:
       - ./env/keycloak.env
     ports:
-      - 8081:8080
+      - 8081:80
+      - 8443:443
     restart: always
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - application
+    volumes:
+      - ../certs/server.crt:/opt/keycloak/conf/server.crt:ro
+      - ../certs/server.key:/opt/keycloak/conf/server.key:ro
 
 networks:
   application:

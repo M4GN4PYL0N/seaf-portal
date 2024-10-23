@@ -10,7 +10,6 @@ services:
     environment:
       VUE_APP_DOCHUB_BACKEND_PORT: 3030
       VUE_APP_DOCHUB_METAMODEL: metamodel/root.yaml
-#      VUE_APP_DOCHUB_ROOT_MANIFEST: workspace/root.yaml
       VUE_APP_DOCHUB_APPEND_DOCHUB_DOCS: n
       VUE_APP_PLANTUML_SERVER: archportal.local/svg/
       VUE_APP_DOCHUB_ROLES: file:///roles/roles.yaml
