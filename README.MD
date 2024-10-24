@@ -65,6 +65,10 @@ openssl req -x509 -newkey rsa:2048 -sha256 -utf8 -days 365 -nodes \
     -config ./openssl.conf \
     -keyout ./server.key \
     -out ./server.crt
+
+ cd ..
+ cp certs/server.crt certs/server.key reverse-proxy/certs
+ 
 ```
 3. Теперь у нас есть сертификаты и можно поднимать наши сервисы. Начнем с keykloak
 
