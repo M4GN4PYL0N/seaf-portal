@@ -49,9 +49,9 @@ services:
         }
     ports:
       - '8929:8929'
-      - '8843:443'
+#      - '8843:443'
       - '2424:22'
-      - '8083:80'
+#      - '8083:80'
     volumes:
 #      - '$GITLAB_HOME/config:/etc/gitlab'
 #      - '$GITLAB_HOME/logs:/var/log/gitlab'
