@@ -4,11 +4,48 @@ services:
     image: gitlab/gitlab-ee:latest
     container_name: gitlab
     restart: always
-    hostname: 'archgitlab.local'
+    hostname: 'git.archportal.local'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.example.com:8929'
+        external_url 'https://git.archportal.local'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
+        nginx['enable'] = false
+        web_server['external_users'] = ['www-data']
+        gitlab_rails['trusted_proxies'] = [ '127.0.0.1', '10.0.0.5' ]
+        puma['worker_processes'] = 0
+
+        sidekiq['concurrency'] = 10
+
+        prometheus_monitoring['enable'] = false
+
+        gitlab_rails['env'] = {
+          'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
+        }
+
+        gitaly['configuration'] = {
+          concurrency: [
+            {
+              'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+              'max_per_repo' => 3,
+            }, {
+              'rpc' => "/gitaly.SSHService/SSHUploadPack",
+              'max_per_repo' => 3,
+            },
+          ],
+          cgroups: {
+            repositories: {
+              count: 2,
+            },
+            mountpoint: '/sys/fs/cgroup',
+            hierarchy_root: 'gitaly',
+            memory_bytes: 500000,
+            cpu_shares: 512,
+          },
+        }
+        gitaly['env'] = {
+          'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000',
+          'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
+        }
     ports:
       - '8929:8929'
       - '8843:443'

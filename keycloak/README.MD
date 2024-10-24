@@ -9,7 +9,7 @@
    ![img_2.png](images/img_2.png)
    ![img_3.png](images/img_3.png)
    ![img_4.png](images/img_4.png)
-   ![img_5.png](images/img_5.png)
+4. ![img_5.png](images/img_5.png)
 4. Перейдите в раздел Roles и создайте роль. Роли в SEAF портале задаются в файле ../seaf-backend/roles/roles.yaml, а подключаются в секции environment ../docker-compose.yaml **VUE_APP_DOCHUB_ROLES:**
    ![img_6.png](images/img_6.png)
    ![img_7.png](images/img_7.png)
