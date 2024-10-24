@@ -10,22 +10,24 @@ services:
     environment:
       VUE_APP_DOCHUB_BACKEND_PORT: 3030
       VUE_APP_DOCHUB_METAMODEL: metamodel/root.yaml
+      VUE_APP_DOCHUB_ROOT_MANIFEST: workspace/
       VUE_APP_DOCHUB_APPEND_DOCHUB_DOCS: n
       VUE_APP_PLANTUML_SERVER: archportal.local/svg/
+      VUE_APP_DOCHUB_ROLES_MODEL: y
       VUE_APP_DOCHUB_ROLES: file:///roles/roles.yaml
-      VUE_APP_DOCHUB_GITLAB_URL: http://archgitlab.local:8929/
-      VUE_APP_DOCHUB_ROOT_MANIFEST: gitlab:1:main@root.yaml
-      VUE_APP_DOCHUB_PERSONAL_TOKEN: glpat-aK63GG4xZFxWcyFM2ixn
-#      VUE_APP_DOCHUB_AUTHORITY_SERVER: http://archaaa.local:8081/realms/archportal
-#      VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID: archportal
-      VUE_APP_DOCHUB_AUTH_PUBLIC_KEY: -----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3vQQfcfSayGGkEXJQIrVrXIl8iK3/AnwV4KkR2G5T1Ka6abBEosbVJS2kS09Fxo84AuFb3jgbXGYJvMiisBTdK5Q3nUqZZGoapR9AkIx5LKTWAAQF5QYc+vUIDZoX5S1MnTdnOGvP8j4jZpH5fgnwc4mXKrxuxWBYEsJiI9lP9rAvowWUKQ7z+AAvqXDFbdymxxsWYPXe092GcOY1PWOmNal8DJxA64uRqWzCb7RYVUMD8nfT5pKfhrka3sCE/gYPSsvxT5s3NSi8fETHi6MdtvXtdNReapJ95ngPoeh9Ug52pk8TiAwmTvi1c25c1vxTYF9QkJLae8WZy4XQDIuHwIDAQAB-----END PUBLIC KEY-----
+#      VUE_APP_DOCHUB_GITLAB_URL: https://git.archportal.local/
+#      VUE_APP_DOCHUB_ROOT_MANIFEST: gitlab:1:main@root.yaml
+#      VUE_APP_DOCHUB_PERSONAL_TOKEN: glpat-aK63GG4xZFxWcyFM2ixn
+      VUE_APP_DOCHUB_AUTHORITY_SERVER: https://aaa.archportal.local/realms/archportal
+      VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID: archportal
+      VUE_APP_DOCHUB_AUTH_PUBLIC_KEY: -----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA38oK2nINBP1naYxruVAR+xHqTSvT63OpmuXvv2PaivH8j6b03EeoW/fAwkbP1uLWzaFh+p4E5YlL51wrak0kFUL3VzM9IyjiJ6z2IPuhwE75i8Qi0Dzxq1+uxhmqd54NPYWY2U0EtXWDvy1U9E8Mz9G4BvQ+UzEaEqSnCU3bS1eY6xJWP9FZqImKevyediOHmGB39J0xekv5bL2CiVeLOi1R+Hd6ESQYWzJ42m+GLXFWNCIQctglsD9ZWk0wKtWBvx9TIX8TJJuOvAcB/SkpgzRSmAPRT+/EJ8xDkjhbmrJsVD5x/KNwYVgR4BCrt9MwYyP3FEEnJBPzFdO2UdmlTQIDAQAB-----END PUBLIC KEY-----
     env_file:
       - ./seaf-backend/.env
     ports:
       - "8080:3030"
     volumes:
-      - /var/archportal/workspace:/var/www/public/workspace/:ro
-      - /var/archportal/roles:/var/www/public/roles:ro
+      - ./roles:/var/www/public/roles:ro
+      - /var/archportal/workspace:/var/www/public/workspace:ro
 
   plantuml:
     container_name: plantuml
