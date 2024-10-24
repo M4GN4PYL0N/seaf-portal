@@ -22,11 +22,13 @@
 | keycloak     | aaa.archportal.local |   
 | gitlab       | git.archportal.local |
 
-2. Склонируйте данный репозиторий
+2. Склонируйте данный репозиторий и инциализируйте сабмодули
 ```shell
 git clone https://github.com/mtrhnv/seaf-portal.git
 
 cd seaf-portal
+
+git submodule init && git submodule update --recursive
 ```
 
 3. Создайте и подпишите на вашем CA сертификаты для каждого FQDN. 
