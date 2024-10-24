@@ -6,23 +6,17 @@ services:
     restart: always
     hostname: 'git.archportal.local'
     environment:
-      # nginx[‘listen_port’] = 80
-      # nginx[‘listen_https’] = false
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://git.archportal.local'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
         nginx['listen_https'] = false
         nginx['listen_port'] = 80
         puma['worker_processes'] = 0
-
         sidekiq['concurrency'] = 10
-
         prometheus_monitoring['enable'] = false
-
         gitlab_rails['env'] = {
           'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
         }
-
         gitaly['configuration'] = {
           concurrency: [
             {
