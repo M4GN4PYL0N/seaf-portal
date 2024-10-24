@@ -66,11 +66,11 @@ openssl req -x509 -newkey rsa:2048 -sha256 -utf8 -days 365 -nodes \
     -keyout ./server.key \
     -out ./server.crt
 
- cd ..
- cp certs/server.crt certs/server.key reverse-proxy/certs
- 
+cd ..
+cp certs/server.crt certs/server.key reverse-proxy/certs
 ```
 Теперь у нас есть сертификаты и можно поднимать наши сервисы.
+
 3. Запускаем Reverse-Proxy
 ``` shell
 cd reverse-proxy
@@ -84,6 +84,7 @@ docker-compose up -d
 cd ..
 ```
 Далее необходимо настроить Keycloak для работы в нашей инсталляции по [инструкции](keycloak/README.MD)
+
 5. Запускаем Gitlab
 ``` shell
 cd keycloak
@@ -91,6 +92,7 @@ docker-compose up -d
 cd ..
 ```
 Далее необходимо настроить Gitlab для работы в нашей инсталляции по [инструкции](gitlab/README.MD)
+
 6. Запускаем SEAF ArchPortal
 Перед запуском убедитесь в корректности параметров в ./docker-compose.yaml и ./seaf-backend/Dockerfile
 ``` shell
@@ -99,7 +101,7 @@ cd ..
 ```
 
 ## Развертывание на разных машинах
-Для развертывания на нескольких виртуальных машинах вам потребуется 
+Для развертывания на нескольких виртуальных машинах вам потребуется:
 1. Cгенерировать сертификаты как в п.2 инструкции по развертыванию на одной машине
 2. Скопировать весь пакет вместе с сгенерированными сертификатами на все машины
 3. Запустить на каждой машине Reverse-Proxy и соответствующий сервис повторяя шаги [3,4], [3,5], [3,6]
@@ -109,4 +111,3 @@ cd ..
 |--------------------------|--------------------------------|-----------------|
 | Пользовательский сегмент | seaf-backend, keycloak, gitlab | tcp/80, tcp/443 |
 | seaf-backend             | keycloak, gitlab               | tcp/443         |   
- 
