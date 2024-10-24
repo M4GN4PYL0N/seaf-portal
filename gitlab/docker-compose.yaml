@@ -8,11 +8,11 @@ services:
     environment:
       #        web_server['external_users'] = ['www-data']
       #        gitlab_rails['trusted_proxies'] = [ '127.0.0.1', '10.0.0.5' ]
+      # nginx[‘listen_port’] = 80
+      # nginx[‘listen_https’] = false
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://git.archportal.local'
+        external_url 'http://git.archportal.local:8929'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
-        nginx[‘listen_port’] = 80
-        nginx[‘listen_https’] = false
 
         puma['worker_processes'] = 0
 
@@ -49,7 +49,7 @@ services:
           'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
         }
     ports:
-      - '8929:80'
+      - '8929:8929'
 #      - '8843:443'
       - '2424:22'
 #      - '8083:80'
