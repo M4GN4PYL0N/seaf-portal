@@ -1,16 +1,16 @@
 # Настройка realm и клиента
 
 1. Войти в консоль Keycloak с дефолтным логином и паролем указанным в keycloak.env
-2. Создайте realm который будет указан в секции environment ../docker-compose.yaml **VUE_APP_DOCHUB_AUTHORITY_SERVER:**
+2. Создайте realm который будет указан в ENV ../seaf-backend/Dockerfile **VUE_APP_DOCHUB_AUTHORITY_SERVER:**
    В тестовом сценарии создается realm **archportal**
    ![img.png](images/img.png)
    ![img_1.png](images/img_1.png)
-3. Перейдите в раздел clients и создайте нового клиента. В данной конфигурации клиент также называется archportal и задается в секции environment ../docker-compose.yaml **VUE_APP_DOCHUB_AUTHORITY_CLIENT:**
+3. Перейдите в раздел clients и создайте нового клиента. В данной конфигурации клиент также называется archportal и задается в ENV ../seaf-backend/Dockerfile **VUE_APP_DOCHUB_AUTHORITY_CLIENT:**
    ![img_2.png](images/img_2.png)
    ![img_3.png](images/img_3.png)
    ![img_4.png](images/img_4.png)
    ![img_5.png](images/img_5.png)
-4. Перейдите в раздел Roles и создайте роль. Роли в SEAF портале задаются в файле ../seaf-backend/roles/roles.yaml а подключаются в секции environment ../docker-compose.yaml **VUE_APP_DOCHUB_ROLES:**
+4. Перейдите в раздел Roles и создайте роль. Роли в SEAF портале задаются в файле ../seaf-backend/roles/roles.yaml, а подключаются в секции environment ../docker-compose.yaml **VUE_APP_DOCHUB_ROLES:**
    ![img_6.png](images/img_6.png)
    ![img_7.png](images/img_7.png)
 5. Далее создадим пользователя, добавим ему роль которую создали на шаге 4 и зададим пароль
