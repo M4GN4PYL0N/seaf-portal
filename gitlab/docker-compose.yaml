@@ -11,7 +11,7 @@ services:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://git.archportal.local'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
-        nginx[‘listen_port’] = 8929
+        nginx[‘listen_port’] = 80
         nginx[‘listen_https’] = false
 
         puma['worker_processes'] = 0
@@ -49,7 +49,7 @@ services:
           'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
         }
     ports:
-      - '8929:8929'
+      - '8929:80'
 #      - '8843:443'
       - '2424:22'
 #      - '8083:80'
