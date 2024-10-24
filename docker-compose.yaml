@@ -10,7 +10,7 @@ services:
     environment:
       VUE_APP_DOCHUB_BACKEND_PORT: 3030
       VUE_APP_DOCHUB_METAMODEL: metamodel/root.yaml
-      VUE_APP_DOCHUB_ROOT_MANIFEST: workspace/
+      VUE_APP_DOCHUB_ROOT_MANIFEST: workspace/root.yaml
       VUE_APP_DOCHUB_APPEND_DOCHUB_DOCS: n
       VUE_APP_PLANTUML_SERVER: archportal.local/svg/
       VUE_APP_DOCHUB_ROLES_MODEL: y
@@ -26,8 +26,8 @@ services:
     ports:
       - "8080:3030"
     volumes:
-      - ./roles:/var/www/public/roles:ro
-      - /var/archportal/workspace:/var/www/public/workspace:ro
+      - ./seaf-backend/roles:/var/www/public/roles/:ro
+      - /var/archportal/workspace:/var/www/public/workspace/:ro
 
   plantuml:
     container_name: plantuml
