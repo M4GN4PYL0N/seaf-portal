@@ -13,9 +13,19 @@ upstream git {
 
 server {
    listen ${NGINX_PORT};
+   server_name ${NGINX_HOST_DH};
    return 301 https://$server_name$request_uri;
 }
-
+server {
+   listen ${NGINX_PORT};
+   server_name ${NGINX_HOST_AAA};
+   return 301 https://$server_name$request_uri;
+}
+server {
+   listen ${NGINX_PORT};
+   server_name ${NGINX_HOST_GIT};
+   return 301 https://$server_name$request_uri;
+}
 
 server {
   listen ${NGINX_TLSPORT} ssl;
