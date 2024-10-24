@@ -49,14 +49,11 @@ services:
         }
     ports:
       - '8929:80'
-      - '8843:443'
+#      - '8843:443'
       - '2424:22'
-      - '8083:8929'
+#      - '8083:8929'
     volumes:
-#      - '$GITLAB_HOME/config:/etc/gitlab'
-#      - '$GITLAB_HOME/logs:/var/log/gitlab'
-#      - '$GITLAB_HOME/data:/var/opt/gitlab'
-       -  ~/gitlab/config:/etc/gitlab
-       -  ~/gitlab/logs:/var/log/gitlab
-       -  ~/gitlab/data:/var/opt/gitlab
+       -  ./mount/config:/etc/gitlab
+       -  ./mount/logs:/var/log/gitlab
+       -  ./mount/data:/var/opt/gitlab
     shm_size: '256m'
