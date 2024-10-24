@@ -6,14 +6,13 @@ services:
     restart: always
     hostname: 'git.archportal.local'
     environment:
-      #        web_server['external_users'] = ['www-data']
-      #        gitlab_rails['trusted_proxies'] = [ '127.0.0.1', '10.0.0.5' ]
       # nginx[‘listen_port’] = 80
       # nginx[‘listen_https’] = false
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://git.archportal.local'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
-
+        nginx[‘listen_https’] = false
+        
         puma['worker_processes'] = 0
 
         sidekiq['concurrency'] = 10
