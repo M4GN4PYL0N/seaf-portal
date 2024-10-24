@@ -5,6 +5,7 @@
 Dockerfile
 docker-compose*.yaml
 node_modules
+seaf-archtool-core/node_modules
 dist
 .github
 pics

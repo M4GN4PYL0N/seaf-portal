@@ -1,5 +1,5 @@
 services:
-  nginx-proxy:
+  reverse-proxy:
     container_name: reverse-proxy
     image: nginx
     env_file:
@@ -9,4 +9,4 @@ services:
       - "443:443"
     volumes:
       - ./templates:/etc/nginx/templates
-      - ./pki:/etc/nginx/pki
+      - ./certs:/etc/nginx/pki
