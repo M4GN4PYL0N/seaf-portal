@@ -32,15 +32,3 @@ services:
     image: seaf/plantuml-server:jetty
     ports:
       - "8079:8080"
-
-  reverse-proxy:
-    container_name: reverse-proxy
-    image: nginx
-    env_file:
-      - ./reverse-proxy/env/nginx.env
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./reverse-proxy/templates:/etc/nginx/templates
-      - ./reverse-proxy/pki:/etc/nginx/pki
