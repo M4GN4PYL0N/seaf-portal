@@ -8,6 +8,7 @@ services:
       args:
         DOCKER_BUILDKIT: 0
     environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
       VUE_APP_DOCHUB_BACKEND_PORT: 3030
       VUE_APP_DOCHUB_METAMODEL: metamodel/root.yaml
       VUE_APP_DOCHUB_APPEND_DOCHUB_DOCS: n
