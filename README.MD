@@ -22,7 +22,14 @@
 | keycloak     | aaa.archportal.local |   
 | gitlab       | git.archportal.local |
 
-2. Создайте и подпишите на вашем CA сертификаты для каждого FQDN. 
+2. Склонируйте данный репозиторий
+```shell
+git clone https://github.com/mtrhnv/seaf-portal.git
+
+cd seaf-portal
+```
+
+3. Создайте и подпишите на вашем CA сертификаты для каждого FQDN. 
 
 Для тестового развертывания мы создадим самоподписанный wildcard сертификат для домена **archportal.local**
 
@@ -75,13 +82,13 @@ cp certs/server.crt certs/server.key reverse-proxy/certs
 ```
 Теперь у нас есть сертификаты и можно поднимать наши сервисы.
 
-3. Запускаем Reverse-Proxy
+4. Запускаем Reverse-Proxy
 ``` shell
 cd reverse-proxy
 docker-compose up -d
 cd ..
 ```
-4. Запускаем Keycloak
+5. Запускаем Keycloak
 ``` shell
 cd keycloak
 docker-compose up -d
@@ -89,7 +96,7 @@ cd ..
 ```
 Далее необходимо настроить Keycloak для работы в нашей инсталляции по [инструкции](keycloak/README.MD)
 
-5. Запускаем Gitlab
+6. Запускаем Gitlab
 ``` shell
 cd keycloak
 docker-compose up -d
@@ -97,7 +104,7 @@ cd ..
 ```
 Далее необходимо настроить Gitlab для работы в нашей инсталляции по [инструкции](gitlab/README.MD)
 
-6. Запускаем SEAF ArchPortal
+7. Запускаем SEAF ArchPortal
 Перед запуском убедитесь в корректности параметров в ./docker-compose.yaml и ./seaf-backend/Dockerfile
 ``` shell
 docker-compose up -d
@@ -108,7 +115,7 @@ cd ..
 Для развертывания на нескольких виртуальных машинах вам потребуется:
 1. Cгенерировать сертификаты как в п.2 инструкции по развертыванию на одной машине
 2. Скопировать весь пакет вместе с сгенерированными сертификатами на все машины
-3. Запустить на каждой машине Reverse-Proxy и соответствующий сервис повторяя шаги [3,4], [3,5], [3,6]
+3. Запустить на каждой машине Reverse-Proxy и соответствующий сервис повторяя шаги [4,5], [4,6], [4,7]
 4. Необходимо обеспечить сетевую доступность между виртуальными машинами и клиентами в соответствии с таблицей 
 
 | Src                      | Dst                            | Protocol/port   |
