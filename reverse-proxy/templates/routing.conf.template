@@ -1,14 +1,14 @@
 upstream dochub {
-   server archportal.local:8080;
+   server ${NGINX_HOST_DH}:8080;
 }
 upstream plantuml {
-   server archportal.local:8079;
+   server ${NGINX_HOST_DH}:8079;
 }
 upstream keycloak {
-   server aaa.archportal.local:8080;
+   server ${NGINX_HOST_AAA}:8081;
 }
 upstream git {
-   server git.archportal.local:8929;
+   server ${NGINX_HOST_GIT}:8929;
 }
 
 server {
