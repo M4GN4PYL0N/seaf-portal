@@ -12,7 +12,7 @@ services:
         external_url 'https://git.archportal.local'
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
         nginx['listen_https'] = false
-        
+        nginx['listen_port'] = 80
         puma['worker_processes'] = 0
 
         sidekiq['concurrency'] = 10
@@ -48,7 +48,7 @@ services:
           'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
         }
     ports:
-      - '8929:8929'
+      - '8929:80'
 #      - '8843:443'
       - '2424:22'
 #      - '8083:80'
