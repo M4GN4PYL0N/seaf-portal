@@ -1,4 +1,3 @@
-#version: '1'
 services:
   seaf-backend:
     container_name: seaf-backend
