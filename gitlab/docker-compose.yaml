@@ -10,6 +10,7 @@ services:
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
         nginx['listen_https'] = false
         nginx['listen_port'] = 80
+        nginx['client_max_body_size'] = 50m
         puma['worker_processes'] = 0
         sidekiq['concurrency'] = 10
         prometheus_monitoring['enable'] = false

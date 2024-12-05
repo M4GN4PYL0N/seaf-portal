@@ -71,6 +71,7 @@ server {
   ssl_certificate /etc/nginx/pki/server.crt;
   ssl_certificate_key /etc/nginx/pki/server.key;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  client_max_body_size 50m
 
   location / {
     proxy_pass http://git;
