@@ -1,5 +1,6 @@
 # Развертывание SEAF ArchPortal
 
+
 В данном сценарии описывается развертывание портала SEAF вместе с Keycloak и Gitlab. Сценарий можно адаптировать под развертывание в промышленных средах.
 ## Все на одной машине
 На одной машине будут развернуты контейнеры SEAF Archtool, PlantUML, Keycloak (postgres), Gitlab и Reverse-Proxy на NGINX.
@@ -12,6 +13,8 @@
 | gitlab        | tcp/8929, tcp/8083, tcp/2424 |
 | postgres      | tcp/5432                     |
 | reverse-proxy | tcp/80, tcp/443              |
+
+Кроме этого набора также необходимо развернуть контейнеры airflow https://github.com/xantia88/mle-airflow
 
 ### Подготовка к развертыванию
 1. Создайте FQDN для сервисов ниже и зарегистрируйте на вашем DNS сервере
