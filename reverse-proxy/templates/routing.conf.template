@@ -31,6 +31,10 @@ server {
   listen ${NGINX_TLSPORT} ssl;
   server_name ${NGINX_HOST_DH};
 
+  proxy_headers_hash_max_size 1024;
+  proxy_headers_hash_bucket_size 128;
+  large_client_header_buffers 8 32k;
+
   ssl_certificate /etc/nginx/pki/server.crt;
   ssl_certificate_key /etc/nginx/pki/server.key;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -68,10 +72,11 @@ server {
   listen ${NGINX_TLSPORT} ssl;
   server_name ${NGINX_HOST_GIT};
 
+  client_max_body_size 50m;
+
   ssl_certificate /etc/nginx/pki/server.crt;
   ssl_certificate_key /etc/nginx/pki/server.key;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  client_max_body_size 50m;
 
   location / {
     proxy_pass http://git;
