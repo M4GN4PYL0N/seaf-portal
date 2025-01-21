@@ -1,4 +1,4 @@
-
+# Настройка ADFS
 
 1. Создать группу в AD
 
@@ -33,7 +33,8 @@
       •	открыть Application Group "SEAF ArchTool"   
       •	выбрать "Web application" "SEAF ArchTool" и нажать "Edit..."   
       •	открыть вкладку "Issuance Transform Rules"   
-      •	нажать кнопку "Add Rule..."   
+      •	нажать кнопку "Add Rule..."  
+
       Далее настроить последовательно 4 правила:   
 
 ![img_adfs_1.png](images/img_adfs_1.png)
@@ -72,9 +73,9 @@
 7.	Добавить scope
 
 Во вкладке «Сlient Permissions» включить scope name:   
-•	Email
-•	Openid
-•	Profile
+* Email
+* Openid
+* Profile
 
 8.	Добавление доменов SEAF ArchTool в trusted origins
 
