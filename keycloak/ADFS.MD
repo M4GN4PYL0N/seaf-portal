@@ -1,35 +1,40 @@
 
 
 1. Создать группу в AD
+
       В AD создать группу и включить в нее необходимых пользователей.
+
 2.	Проверить доступность конфигурации openid
-      https://{{domain}}/adfs/.well-known/openid-configuration
+
+      https://{{domain}}/adfs/.well-known/openid-configuration   
       {{domain}} – заменить на домен ADFS
+
 3.	Открыть консоль ADFS
+
       Start - Server Manager - Tools - AD FS Management
 
 4.	Создать кастомный  claim
+
       Нужен для отображения ФИО в интерфейсе SEAF ArchTool после успешного входа в систему.
-      AD FS – Service – Claim Descriptions – Add Claim Description
-      •	Display name “name for SEAF ArchTool”
-      •	Short Name “name”
-      •	Claim type http://yyy.ru/name
+      AD FS – Service – Claim Descriptions – Add Claim Description   
+      •	Display name “name for SEAF ArchTool”   
+      •	Short Name “name”   
+      •	Claim type http://yyy.ru/name   
       •	Включить 2 галки «Publish….”
 
-
 5.	Создать Application Group
-      Application Groups - Add Application Group:
-      •	ввести название "SEAF ArchTool" в поле "Name"\
-      •	выбрать template "Web broweser accessing a web application"
-      •	в поле Redirect URI указать домен приложения SEAF ArchTool (например, https://archportal.local)
-      •	в поле Police выбрать "Permit everyone"
+      Application Groups - Add Application Group:   
+      •	ввести название "SEAF ArchTool" в поле "Name"\   
+      •	выбрать template "Web broweser accessing a web application"   
+      •	в поле Redirect URI указать домен приложения SEAF ArchTool (например, https://archportal.local)   
+      •	в поле Police выбрать "Permit everyone"   
 
-6.	Настроить правила по добавлению claim в jwt-токен:
-      •	открыть Application Group "SEAF ArchTool"
-      •	выбрать "Web application" "SEAF ArchTool" и нажать "Edit..."
-      •	открыть вкладку "Issuance Transform Rules"
-      •	нажать кнопку "Add Rule..."
-      Далее настроить последовательно 4 правила:
+6.	Настроить правила по добавлению claim в jwt-токен:   
+      •	открыть Application Group "SEAF ArchTool"   
+      •	выбрать "Web application" "SEAF ArchTool" и нажать "Edit..."   
+      •	открыть вкладку "Issuance Transform Rules"   
+      •	нажать кнопку "Add Rule..."   
+      Далее настроить последовательно 4 правила:   
 
 ![img_adfs_1.png](images/img_adfs_1.png)
 
@@ -66,7 +71,7 @@
 
 7.	Добавить scope
 
-Во вкладке «Сlient Permissions» включить scope name:
+Во вкладке «Сlient Permissions» включить scope name:   
 •	Email
 •	Openid
 •	Profile
@@ -77,29 +82,29 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/operations/custo
 
 Войти в PowerShell с правами администратора и выполнить команды
 
-Set-AdfsResponseHeaders -EnableCORS $true
-Set-AdfsResponseHeaders -CORSTrustedOrigins https://archportal.local (указать свой домен)
-Get-AdfsResponseHeaders
+Set-AdfsResponseHeaders -EnableCORS $true   
+Set-AdfsResponseHeaders -CORSTrustedOrigins https://archportal.local (указать свой домен)   
+Get-AdfsResponseHeaders   
 
-9.	Выпустить сертификат безопасности для ADFS
-      Библиотека в SEAF ArchTool не поддерживает формат сертификата безопасности, выпускаемый по умолчанию в ADFS.
+9.	Выпустить сертификат безопасности для ADFS   
+      Библиотека в SEAF ArchTool не поддерживает формат сертификата безопасности, выпускаемый по умолчанию в ADFS.   
       •	Сгенерировать сертификат в OpenSSL SHA256, 2024 bit RS256 в формате .pfx
       •	Загрузить сертификат в Personal на ВМ с ADFS
       •	Выполнить команду в PowerShell с правами администратора:
-      Set-AdfsProperties -AutoCertificateRollover $false
+      Set-AdfsProperties -AutoCertificateRollover $false   
       •	Добавить сертификат в консоль ADFS - Service - Ceriticates - Token-Signign
       •	Оснастка MMC - Ctrl+M - Personal Certificates - правой кнопкой мыши на новом сертификате
-      Добавить пользователя srv_adfs на чтение к сертификату в Personal - All task - Manage Private Keys - Add - пользователь srv_adfs на чтение
+      Добавить пользователя srv_adfs на чтение к сертификату в Personal - All task - Manage Private Keys - Add - пользователь srv_adfs на чтение   
       •	в консоль ADFS - Service - Ceriticates - Token-Signign установить set primary для нового сертификата
-      •	Проверить новый сертификат
+      •	Проверить новый сертификат   
       https://{{domain}}/adfs/discovery/keys  
-      {{domain}} – заменить на домен ADFS
+      {{domain}} – заменить на домен ADFS   
 10.	Добавить параметры в конфиг в SEAF ArchTool в соответсвующие переменные в файле ../.env
 
-Значения из well-known/openid-configuration 
-VUE_APP_DOCHUB_AUTHORITY_SERVER= точка входа  - issuer в ADFS (см. п.2)
-VUE_APP_DOCHUB_AUTH_PUBLIC_KEY= точка входа - jwks_uri в ADFS (см. п. 9)
+Значения из well-known/openid-configuration:    
+VUE_APP_DOCHUB_AUTHORITY_SERVER= точка входа  - issuer в ADFS (см. п.2)   
+VUE_APP_DOCHUB_AUTH_PUBLIC_KEY= точка входа - jwks_uri в ADFS (см. п. 9)   
 
-Значение из консоли ADFS:
-VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID= client_id в ADFS (см. п. 5)
+Значение из консоли ADFS:   
+VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID= client_id в ADFS (см. п. 5)   
 
