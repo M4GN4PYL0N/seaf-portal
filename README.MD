@@ -93,13 +93,14 @@ cd reverse-proxy
 docker-compose up -d
 cd ..
 ```
-5. Запускаем Keycloak
+5. Запускаем Keycloak или настраиваем свой OpenID Identity Provider
 ``` shell
 cd keycloak
 docker-compose up -d
 cd ..
 ```
 Далее необходимо настроить Keycloak для работы в нашей инсталляции по [инструкции](keycloak/README.MD)
+Если вы используете ADFS, то настройка описана здесь: [инструкции](keycloak/ADFS.MD)
 
 6. Запускаем Gitlab
 ``` shell
