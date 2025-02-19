@@ -188,6 +188,7 @@ $dataset := $mergedeep($ ~> $each(function($v, $k){$k in ["entities", "datasets"
 *    "kadzo.metamodel.v2023.data_objects.systems"
 *    "kadzo.metamodel.v2023.domain"
 *    "kadzo.metamodel.v2023.domain.foreign"
+
 Легко превращаются в следующее регулярное выражение
 ```regexp
 ^kadzo\.metamodel\.v2023\..*$
