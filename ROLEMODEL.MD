@@ -165,18 +165,32 @@ roles:
 Как упростить себе задачу?
 Можно выбрать все фильтруемые объекты списком и собрать в excel регулярные выражения...
 
-Вывести список все объектов:
-```jsonata
-$recursiveObjectKeys := function($obj) {
-    $type($obj) = "object" ? (
-        /* Собираем ключи текущего уровня */
-        $k := $keys($obj);
-        /* Проходим по значениям и рекурсивно собираем их ключи */
-        $append($k, $obj.*.($recursiveObjectKeys($)))
-    ) : []
-};
+#### Действия по шагам
 
-/* Применяем функцию и удаляем дубликаты */
-$recursiveObjectKeys($) ~> $distinct()
+1. Вывести список всех фильтруемых объектов:
+```jsonata
+$getFilterable := function($obj){(
+    $obj ~> $each(function($v, $k){$type($v) = "object" ? $append($k, $getFilterable($v))});
+)};
+$dataset := $mergedeep($ ~> $each(function($v, $k){$k in ["entities", "datasets", "functions", "$package", "rules", "kadzo", "companies", "sber"] ? {"metamodel":{$k:$v}} : {"data":{$k:$v}}}));
+{
+    "Ключи данных":$getFilterable($dataset.data).* ~> $distinct()^($),
+    "Ключи метамодели": $getFilterable($dataset.metamodel).* ~> $distinct()^($)
+};
+```
+* Список ключей метамодели использовать для управления доступом к представлениям и меню.
+* Список ключей данных использовать для управления доступом к архитектурным данным.
+
+2. Просуммировать в регулярные выражения названия объектов архитектурного озера, например строки
+*    "kadzo.metamodel.v2023.data_objects"
+*    "kadzo.metamodel.v2023.data_objects.general"
+*    "kadzo.metamodel.v2023.data_objects.parent"
+*    "kadzo.metamodel.v2023.data_objects.systems"
+*    "kadzo.metamodel.v2023.domain"
+*    "kadzo.metamodel.v2023.domain.foreign"
+Легко превращаются в следующее регулярное выражение
+```regexp
+^kadzo\.metamodel\.v2023\..*$
 ```
 
+3. Результат положить в роль
