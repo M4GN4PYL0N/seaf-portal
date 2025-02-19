@@ -35,7 +35,7 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
    ![img.png](images/img.png)
 
 2. Сохраните токен для последующей конфигурации SEAF Portal
-   Токен необходимо задать в секции environment ../docker-compose.yaml **VUE_APP_DOCHUB_PERSONAL_TOKEN:**
+   Токен необходимо задать в секции ./.env **VUE_APP_DOCHUB_PERSONAL_TOKEN:**
 
 3. Создайте новую группу
    ![img_1.png](images/img_1.png)
@@ -47,7 +47,7 @@ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
    ![img_3.png](images/img_3.png)
 
 ## Настройте параметры подключения в SEAF Portal
-В секции environment ../docker-compose.yaml (в корне проекта)
+В файле ./.env (в корне проекта)
 ``` yaml
 VUE_APP_DOCHUB_GITLAB_URL: https://git.archportal.local/
 VUE_APP_DOCHUB_ROOT_MANIFEST: gitlab:5:main@root.yaml        # Файл и импортами
