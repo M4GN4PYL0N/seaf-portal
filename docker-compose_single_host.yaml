@@ -1,0 +1,90 @@
+services:
+# SEAF Portal tools
+  seaf-backend:
+    container_name: seaf-backend
+    build:
+      context: seaf-backend
+      dockerfile: Dockerfile
+      args:
+        DOCKER_BUILDKIT: 0
+        VUE_APP_PLANTUML_SERVER: ${VUE_APP_PLANTUML_SERVER}
+        VUE_APP_DOCHUB_ROLES_MODEL: ${VUE_APP_DOCHUB_ROLES_MODEL}
+        VUE_APP_DOCHUB_AUTHORITY_SERVER: ${VUE_APP_DOCHUB_AUTHORITY_SERVER}
+        VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID: ${VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID}
+    env_file:
+      - .env
+    volumes:
+      - ./seaf-backend/roles:/var/www/public/roles/:ro
+      - /var/archportal/workspace:/var/www/public/workspace/:ro
+    networks:
+      archtool:
+        aliases:
+          - seaf-backend
+
+  plantuml:
+    container_name: plantuml
+    image: seaf/plantuml-server:jetty
+    networks:
+      archtool:
+        aliases:
+          - plantuml
+
+# Keycloak stuff
+  postgres:
+    build:
+      context: keycloak/dockerfiles
+      dockerfile: postgres.dockerfile
+    container_name: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+    env_file:
+      - ./keycloak/env/postgres.env
+    networks:
+      archtool:
+        aliases:
+          - postgres
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start
+    env_file:
+      - ./keycloak/env/keycloak_single_host.env
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres:postgres
+    networks:
+      archtool:
+        aliases:
+          - keycloak
+
+# Reverse Proxy
+  reverse-proxy:
+    container_name: reverse-proxy
+    image: nginx
+    env_file:
+      - ./reverse-proxy/env/nginx.env
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - seaf-backend:seaf-backend
+      - plantuml:plantuml
+      - keycloak:keycloak
+    volumes:
+      - ./reverse-proxy/templates/routing_single_host.conf.template:/etc/nginx/templates/routing_single_host.conf.template:ro
+      - ./reverse-proxy/certs:/etc/nginx/pki
+    networks:
+      archtool:
+        aliases:
+          - reverse-proxy
+
+networks:
+  archtool:
+    name: ArchTool
