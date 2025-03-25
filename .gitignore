@@ -1,2 +1,6 @@
 certs
 /gitlab/mount/
+.cspell/
+.devcontainer/
+ca-certificates/
+.npmrc

@@ -6,7 +6,7 @@ WORKDIR /var/www
 COPY seaf-archtool-core/package.json seaf-archtool-core/package-lock.json ./
 COPY seaf-archtool-core/plugins ./plugins/
 # RUN --mount=type=cache,target=/root/.npm npm install
-RUN npm install
+RUN npm install --loglevel verbose
 
 FROM node:${NODE_VERSION}-alpine AS builder
 ARG VUE_APP_DOCHUB_ROLES_MODEL=n \
@@ -24,11 +24,12 @@ ENV NODE_ENV=production \
     VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID=$VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID \
     VUE_APP_PLANTUML_SERVER=$VUE_APP_PLANTUML_SERVER
 # RUN --mount=type=cache,target=./node_modules/.cache npm run build
-RUN npm run build
+RUN npm run build --loglevel verbose
 
 FROM node:${NODE_VERSION}-alpine AS runtime
 WORKDIR /var/www
 COPY --from=builder /var/www/dist ./dist
+COPY --from=builder /var/www/public ./public
 COPY --from=builder /var/www/src ./src
 COPY --from=builder /var/www/public ./public
 COPY --from=builder /var/www/node_modules ./node_modules
