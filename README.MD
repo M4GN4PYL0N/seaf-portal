@@ -18,9 +18,10 @@
 
 **Развернуть seaf-portal в Kubernetes** - [настроить](README_KUBER.MD)
 
-Кроме этого набора также необходимо развернуть контейнеры airflow https://github.com/xantia88/mle-airflow для настройки функции **реверса инфраструктуры**
+Кроме этого набора также необходимо развернуть контейнеры airflow <https://github.com/xantia88/mle-airflow> для настройки функции **реверса инфраструктуры**
 
 ### Подготовка к развертыванию
+
 1. Создайте FQDN для сервисов ниже и зарегистрируйте на вашем DNS сервере (можно ограничиться файлом /etc/hosts)
 
 | Контейнер    | FQDN (пример)             |
@@ -29,9 +30,7 @@
 | keycloak     | keycloak.archportal.local |
 | gitlab       | git.archportal.local      |
 
-
 2. Склонируйте данный репозиторий и инциализируйте сабмодули
-
 
 ```shell
 git clone https://github.com/mtrhnv/seaf-portal.git
@@ -101,7 +100,7 @@ cp certs/server.crt certs/server.key reverse-proxy/certs
 
 4. Запускаем Reverse-Proxy
 
-Перед запуском укажите корректные FQDN для ваших сервисов в файле ./reverse-proxy/env/nginx.env  
+Перед запуском укажите корректные FQDN для ваших сервисов в файле ./reverse-proxy/env/nginx.env
 
 ``` shell
 cd reverse-proxy
