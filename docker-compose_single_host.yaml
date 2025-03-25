@@ -1,0 +1,147 @@
+services:
+# SEAF Portal tools
+  seaf-backend:
+    container_name: seaf-backend
+    build:
+      context: seaf-backend
+      dockerfile: Dockerfile
+      args:
+        DOCKER_BUILDKIT: 0
+        VUE_APP_PLANTUML_SERVER: ${VUE_APP_PLANTUML_SERVER}
+        VUE_APP_DOCHUB_ROLES_MODEL: ${VUE_APP_DOCHUB_ROLES_MODEL}
+        VUE_APP_DOCHUB_AUTHORITY_SERVER: ${VUE_APP_DOCHUB_AUTHORITY_SERVER}
+        VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID: ${VUE_APP_DOCHUB_AUTHORITY_CLIENT_ID}
+    env_file:
+      - .env
+    volumes:
+      - ./seaf-backend/roles:/var/www/public/roles/:ro
+    networks:
+      archtool:
+        aliases:
+          - seaf-backend
+
+  plantuml:
+    container_name: plantuml
+    image: seaf/plantuml-server:jetty
+    networks:
+      archtool:
+        aliases:
+          - plantuml
+
+# Keycloak stuff
+  postgres:
+    build:
+      context: keycloak/dockerfiles
+      dockerfile: postgres.dockerfile
+    container_name: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+    env_file:
+      - ./keycloak/env/postgres.env
+    networks:
+      archtool:
+        aliases:
+          - postgres
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start
+    env_file:
+      - ./keycloak/env/keycloak_single_host.env
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres:postgres
+    networks:
+      archtool:
+        aliases:
+          - keycloak
+
+# Gitlab
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: 'git.archportal.local'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://git.archportal.local'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+        nginx['listen_https'] = false
+        nginx['listen_port'] = 80
+        nginx['client_max_body_size'] = '50m'
+        puma['worker_processes'] = 0
+        sidekiq['concurrency'] = 10
+        prometheus_monitoring['enable'] = false
+        gitlab_rails['env'] = {
+          'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
+        }
+        gitaly['configuration'] = {
+          concurrency: [
+            {
+              'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+              'max_per_repo' => 3,
+            }, {
+              'rpc' => "/gitaly.SSHService/SSHUploadPack",
+              'max_per_repo' => 3,
+            },
+          ],
+          #cgroups: {
+          #  repositories: {
+          #    count: 2,
+          #  },
+          #  mountpoint: '/sys/fs/cgroup',
+          #  hierarchy_root: 'gitaly',
+          #  memory_bytes: 500000,
+          #  cpu_shares: 512,
+          #},
+        }
+        gitaly['env'] = {
+          'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000',
+          'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
+        }
+    ports:
+#      - '8929:80'
+      - '2424:22'
+    volumes:
+      - ./gitlab/mount/config:/etc/gitlab
+      - ./gitlab/mount/logs:/var/log/gitlab
+      - ./gitlab/mount/data:/var/opt/gitlab
+    shm_size: '256m'
+    networks:
+      archtool:
+        aliases:
+          - gitlab
+          - git.archportal.local
+
+# Reverse Proxy
+  reverse-proxy:
+    container_name: reverse-proxy
+    image: nginx
+    env_file:
+      - ./reverse-proxy/env/nginx.env
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - seaf-backend:seaf-backend
+      - plantuml:plantuml
+      - keycloak:keycloak
+      - gitlab:gitlab
+    volumes:
+      - ./reverse-proxy/templates/routing_single_host.conf.template:/etc/nginx/templates/routing_single_host.conf.template:ro
+      - ./reverse-proxy/certs:/etc/nginx/pki
+    networks:
+      archtool:
+        aliases:
+          - reverse-proxy
+
+networks:
+  archtool:
+    name: ArchTool

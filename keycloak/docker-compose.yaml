@@ -13,8 +13,6 @@ services:
       - ./env/postgres.env
     ports:
       -  '127.0.0.1:5432:5432'
-    networks:
-      - application
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -28,9 +26,3 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - application
-
-networks:
-  application:
-    name: network
