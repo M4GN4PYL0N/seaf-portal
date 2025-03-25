@@ -31,7 +31,6 @@ WORKDIR /var/www
 COPY --from=builder /var/www/dist ./dist
 COPY --from=builder /var/www/public ./public
 COPY --from=builder /var/www/src ./src
-COPY --from=builder /var/www/public ./public
 COPY --from=builder /var/www/node_modules ./node_modules
 CMD ["node", "src/backend/main.mjs"]
 EXPOSE 3030
