@@ -24,25 +24,7 @@
 | keycloak     | aaa.archportal.local |   
 | gitlab       | git.archportal.local |
 
-
-2. Настройте параметры логирования Docker
-
-```shell
-sudo nano /etc/docker/daemon.json
-{
-    "userns-remap": "",
-    "log-driver": "json-file",
-    "log-opts": {
-        "max-size": "12m",
-        "max-file": "3"
-    }
-}
-```
-3. Настройте параметры Docker Desktop (если используете его)
-
-General -> Choose file sharing implementation for your containers -> gRPC FUSE
-
-4. Склонируйте данный репозиторий и инициализируйте сабмодули
+2. Склонируйте данный репозиторий и инициализируйте сабмодули
 ```shell
 git clone https://github.com/mtrhnv/seaf-portal.git
 
@@ -51,7 +33,7 @@ cd seaf-portal
 git submodule init && git submodule update --recursive
 ```
 
-5. Создайте и подпишите на вашем CA сертификаты для каждого FQDN. 
+3. Создайте и подпишите на вашем CA сертификаты для каждого FQDN. 
 
 Для тестового развертывания мы создадим самоподписанный wildcard сертификат для домена **archportal.local**
 
@@ -104,14 +86,14 @@ cp certs/server.crt certs/server.key ./reverse-proxy/certs
 ```
 Теперь у нас есть сертификаты и можно поднимать наши сервисы.
 
-6. Внесите созданные в п.1 адрес а в следующие конфигурационные файлы:
+4. Внесите созданные в п.1 адрес а в следующие конфигурационные файлы:
 
 * ./docker-compose_single_host.yaml - в разделе настроек gitlab
 * ./keycloak/env/keycloak_single_host.env
 * ./reverse-proxy/env/nginx.env
 
 
-7. Запускаем решение командой
+5. Запускаем решение командой
 
 ``` shell
 docker-compose --file docker-compose_single_host.yaml up -d
@@ -119,7 +101,7 @@ docker-compose --file docker-compose_single_host.yaml up -d
 Далее необходимо настроить Keycloak и Gitverse по инструкциям из [основного](README.MD) раздела и внести соответсвующие настройки в ./.env
 
 
-8. Пересобираем контейнер seaf-backend после того как настроены сервисы и внесены параметры в ./.env
+6. Пересобираем контейнер seaf-backend после того как настроены сервисы и внесены параметры в ./.env
 
 Откройте ./gitlab/docker-compose.yaml и укажите корректный external_url
 ``` shell

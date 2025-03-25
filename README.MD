@@ -14,6 +14,7 @@
 | reverse-proxy | tcp/80, tcp/443              |
 
 **Развернуть все на одной машине** - [настроить](README_SINGLE_HOST.MD)
+**Развернуть seaf-portal в Kubernetes** - [настроить](README_KUBER.MD)
 
 Кроме этого набора также необходимо развернуть контейнеры airflow https://github.com/xantia88/mle-airflow для настройки функции **реверса инфраструктуры**
 

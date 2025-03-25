@@ -15,7 +15,6 @@ services:
       - .env
     volumes:
       - ./seaf-backend/roles:/var/www/public/roles/:ro
-      - /var/archportal/workspace:/var/www/public/workspace/:ro
     networks:
       archtool:
         aliases:
@@ -64,6 +63,63 @@ services:
         aliases:
           - keycloak
 
+# Gitlab
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: 'git.archportal.local'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://git.archportal.local'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+        nginx['listen_https'] = false
+        nginx['listen_port'] = 80
+        nginx['client_max_body_size'] = '50m'
+        puma['worker_processes'] = 0
+        sidekiq['concurrency'] = 10
+        prometheus_monitoring['enable'] = false
+        gitlab_rails['env'] = {
+          'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
+        }
+        gitaly['configuration'] = {
+          concurrency: [
+            {
+              'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+              'max_per_repo' => 3,
+            }, {
+              'rpc' => "/gitaly.SSHService/SSHUploadPack",
+              'max_per_repo' => 3,
+            },
+          ],
+          #cgroups: {
+          #  repositories: {
+          #    count: 2,
+          #  },
+          #  mountpoint: '/sys/fs/cgroup',
+          #  hierarchy_root: 'gitaly',
+          #  memory_bytes: 500000,
+          #  cpu_shares: 512,
+          #},
+        }
+        gitaly['env'] = {
+          'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000',
+          'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'
+        }
+    ports:
+#      - '8929:80'
+      - '2424:22'
+    volumes:
+      - ./gitlab/mount/config:/etc/gitlab
+      - ./gitlab/mount/logs:/var/log/gitlab
+      - ./gitlab/mount/data:/var/opt/gitlab
+    shm_size: '256m'
+    networks:
+      archtool:
+        aliases:
+          - gitlab
+          - git.archportal.local
+
 # Reverse Proxy
   reverse-proxy:
     container_name: reverse-proxy
@@ -77,6 +133,7 @@ services:
       - seaf-backend:seaf-backend
       - plantuml:plantuml
       - keycloak:keycloak
+      - gitlab:gitlab
     volumes:
       - ./reverse-proxy/templates/routing_single_host.conf.template:/etc/nginx/templates/routing_single_host.conf.template:ro
       - ./reverse-proxy/certs:/etc/nginx/pki
