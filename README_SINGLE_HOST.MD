@@ -1,29 +1,27 @@
-# Развертывание SEAF ArchPortal на одной машине (Docker Desktop и  т.п.)
-
+# Развертывание SEAF ArchPortal на одной машине (Docker Desktop и т.п.)
 
 В данном сценарии описывается развертывание портала SEAF вместе с Keycloak и Gitlab.
 На одной машине будут развернуты контейнеры SEAF Archtool, PlantUML, Keycloak (postgres), Gitlab и Reverse-Proxy на NGINX.
 
 Взаимодействие между компонентами реализовано по внутренней сети docker.
 
-| Контейнер     | Порты и протоколы           |
-|---------------|-----------------------------|
-| seaf-backend  | tcp/3030 (archtool network) |
-| plantuml      | tcp/8080 (archtool network) |   
-| keycloak      | tcp/8080 (archtool network) |
-| gitlab        | tcp/8929, tcp/8083, tcp/2424|
-| reverse-proxy | tcp/80, tcp/443             |
+| Контейнер     | Порты и протоколы            |
+|---------------|------------------------------|
+| seaf-backend  | tcp/3030 (archtool network)  |
+| plantuml      | tcp/8080 (archtool network)  |
+| keycloak      | tcp/8080 (archtool network)  |
+| gitlab        | tcp/8929, tcp/8083, tcp/2424 |
+| reverse-proxy | tcp/80, tcp/443              |
 
+## Подготовка к развертыванию
 
-### Подготовка к развертыванию
 1. Добавьте в /etc/hosts адреса по которым будут доступны компоненты решения, пример ниже в таблице.
 
-| Контейнер    | FQDN (пример)        |
-|--------------|----------------------|
-| seaf-backend | archportal.local     |
-| keycloak     | aaa.archportal.local |   
-| gitlab       | git.archportal.local |
-
+| Контейнер    | FQDN (пример)             |
+|--------------|---------------------------|
+| seaf-backend | archportal.local          |
+| keycloak     | keycloak.archportal.local |
+| gitlab       | git.archportal.local      |
 
 2. Настройте параметры логирования Docker
 
@@ -38,11 +36,13 @@ sudo nano /etc/docker/daemon.json
     }
 }
 ```
+
 3. Настройте параметры Docker Desktop (если используете его)
 
 General -> Choose file sharing implementation for your containers -> gRPC FUSE
 
 4. Склонируйте данный репозиторий и инициализируйте сабмодули
+
 ```shell
 git clone https://github.com/mtrhnv/seaf-portal.git
 
@@ -51,11 +51,12 @@ cd seaf-portal
 git submodule init && git submodule update --recursive
 ```
 
-5. Создайте и подпишите на вашем CA сертификаты для каждого FQDN. 
+5. Создайте и подпишите на вашем CA сертификаты для каждого FQDN.
 
 Для тестового развертывания мы создадим самоподписанный wildcard сертификат для домена **archportal.local**
 
 **В консоли перейдите в корень клонированного репозитория!**
+
 ```shell
 # Зададим наш домен
 DOMAIN=archportal.local
@@ -102,6 +103,7 @@ openssl req -x509 -newkey rsa:2048 -sha256 -utf8 -days 365 -nodes \
 cd ..
 cp certs/server.crt certs/server.key ./reverse-proxy/certs
 ```
+
 Теперь у нас есть сертификаты и можно поднимать наши сервисы.
 
 6. Внесите созданные в п.1 адрес а в следующие конфигурационные файлы:
@@ -110,18 +112,18 @@ cp certs/server.crt certs/server.key ./reverse-proxy/certs
 * ./keycloak/env/keycloak_single_host.env
 * ./reverse-proxy/env/nginx.env
 
-
 7. Запускаем решение командой
 
 ``` shell
 docker-compose --file docker-compose_single_host.yaml up -d
 ```
-Далее необходимо настроить Keycloak и Gitverse по инструкциям из [основного](README.MD) раздела и внести соответсвующие настройки в ./.env
 
+Далее необходимо настроить Keycloak и Gitverse по инструкциям из [основного](README.MD) раздела и внести соответсвующие настройки в ./.env
 
 8. Пересобираем контейнер seaf-backend после того как настроены сервисы и внесены параметры в ./.env
 
 Откройте ./gitlab/docker-compose.yaml и укажите корректный external_url
+
 ``` shell
 docker-compose --file docker-compose_single_host.yaml stop seaf-backend
 docker-compose --file docker-compose_single_host.yaml build seaf-backend
