@@ -1,0 +1,46 @@
+{
+  "git": {
+    "push_script": "/scripts/git_push.sh",
+    "output_dir": "/var/lib/airflow/output"
+  },
+  "vcenters": [
+    {
+      "vmuser": "vmuser",
+      "vmpassword": "vmpassword",
+      "vmhost": "xx.xxx.x.xx",
+      "prefix": "",
+      "location": "",
+      "output": "/var/lib/airflow/output/vc1",
+      "git_push_script": "/scripts/git_push.sh",
+      "git_output_dir": "/var/lib/airflow/output"
+    },
+    {
+      "vmuser": "vmuser",
+      "vmpassword": "vmpassword",
+      "vmhost": "xxx.xx.xx.xx",
+      "prefix": "",
+      "location": "",
+      "output": "/var/lib/airflow/output/vc2",
+      "git_push_script": "/scripts/send_mail.sh",
+      "git_output_dir": "/var/lib/airflow/output"
+    }
+  ],
+  "kubernetes": {
+    "output": "/var/lib/airflow/output/kub"
+  },
+  "gigachat": {},
+  "vmwarecloud": {
+    "script_path": "",
+    "config_file": "configuration copy.conf",
+    "output": "/var/lib/airflow/output/vmcloud"
+  },
+  "advanced": {
+    "cloudregion": "ru-moscow-1",
+    "cloudproject": "здесь должен быть идентификатор проекта/тенанта",
+    "credentials": "credentials.csv",
+    "company_domain": "berezka",
+    "dc": "идентификатор ЦОД/IaaS из сущности seaf.ta.services.dc",
+    "tenant": "",
+    "output": "/var/lib/airflow/output/advanced"
+  }
+}
