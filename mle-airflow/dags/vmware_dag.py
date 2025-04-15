@@ -2,6 +2,7 @@ import datetime
 from airflow.models import Variable
 from airflow.operators.bash import BashOperator
 from airflow.decorators import dag, task
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from vmware import functions, vcenter
 import json
 
@@ -18,8 +19,8 @@ def vmware_dag():
     def connect(config):
         print("config", config)
         vm_host = config.get("vmhost")
-        vm_user = config.get("vmuser")
-        vm_password = config.get("vmpassword")
+        vm_user = Variable.get(config.get("vmuser"))
+        vm_password = Variable.get(config.get("vmpassword"))
         print("connect", vm_host, vm_user, vm_password)
         return vcenter.connect(vm_host, vm_user, vm_password)
 
@@ -102,7 +103,6 @@ def vmware_dag():
                     hosts.append(json_host)
                 json_dc = vcenter.get_dc_json(dc)
                 functions.export_hosts(hosts, json_dc, config)
-
     #configs = get_config()
     #git = configs.get("git")
     #push = BashOperator(
@@ -116,14 +116,28 @@ def vmware_dag():
 
     bash_cmd_2run = []
     configs = get_config()
+    print("configs", configs)
     for config in configs.get("vcenters"):
+       print("config", config)
        git_push_script = config["git_push_script"]
-       git_output_dir = config["git_output_dir"]
+       output = config["output"]
+       git_user = Variable.get(config["git_user"])
+       git_token = Variable.get(config["git_token"])
+       git_clone = config["git_clone"]
+       git_project = config["git_project"]
+       git_branch = config["git_branch"]
+       git_commit_user = config["git_commit_user"]
+       git_commit_email = config["git_commit_email"]
        bash_2run = BashOperator(
           task_id="git_push_" + config["vmhost"],
-          bash_command="{} {} ".format(git_push_script, git_output_dir)
+          bash_command="{} {} {} {} {} {} {} {} {}".format(git_push_script, output, git_project, git_branch, git_user, git_token, git_clone, git_commit_user, git_commit_email)
        )
        bash_cmd_2run.append(bash_2run)
+
+    trigger_giga_dag = TriggerDagRunOperator(
+        task_id='trigger_giga_dag',
+        trigger_dag_id='giga_dag',
+    )
 
     dcs = datacenters()
     vms = vms()
@@ -133,21 +147,9 @@ def vmware_dag():
     dvpgroups = dvpgroups()
     hosts = hosts()
     push = push()
-    
-    dcs >> [vms, vapps, networks,
-            dvswitches, dvpgroups, hosts] >> push >> bash_cmd_2run
-
-
-    dcs = datacenters()
-    vms = vms()
-    vapps = vapps()
-    networks = networks()
-    dvswitches = dvswitches()
-    dvpgroups = dvpgroups()
-    hosts = hosts()
 
     dcs >> [vms, vapps, networks,
-            dvswitches, dvpgroups, hosts] >> push
+            dvswitches, dvpgroups, hosts] >> push >> bash_cmd_2run >> trigger_giga_dag
 
 
 vmware_dag()
