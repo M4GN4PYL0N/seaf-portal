@@ -12,6 +12,7 @@ def export_dcs(dcs, config):
     for json_dc in dcs:
 
         dc_id = get_id(prefix, "vdcs", json_dc.get("_vimid"))
+        #dc_id = get_id(prefix, "vdcs", dc_id)
 
         alldcs_json["seaf.ta.reverse.vmwareonprem.vdcs"][dc_id] = {
             "id": json_dc.get("_vimid"),
@@ -24,6 +25,20 @@ def export_dcs(dcs, config):
 
     save(alldcs_json, exportpath, "dcs")
 
+def export_vm_tags(json_vm):
+    #print(json_vm)
+    customfields = []
+    for field in json_vm.get("availableField"):
+        #print(field)
+        id = field.get("key")
+        name = field.get("name")
+        custom_value = [x.get("value") for x in json_vm.get("value") if x.get("key") == id]
+        if len(custom_value) == 0:
+            custom_value = ""
+        else:
+            custom_value = custom_value[0]
+        customfields.append({name: custom_value})
+    return customfields
 
 def export_vms(vms, dc, config):
 
@@ -32,7 +47,7 @@ def export_vms(vms, dc, config):
 
     allvms_json = {"seaf.ta.components.server": {}}
     for json_vm in vms:
-
+        #print(json_vm)
         vm_id = get_id(prefix, "server", json_vm.get("_vimid"))
         vapp_id = [f"{prefix}vapps.{x.split(':')[-1]}" if not (
             x in {None, "", "null"}) else '' for x in json_vm.get("parentVApp", "") or []]
@@ -55,6 +70,7 @@ def export_vms(vms, dc, config):
             'nic_qty': len(json_vm.get("guest").get("net")),
             'subnets': [f"{prefix}network.{x.split(':')[-1]}" for x in json_vm.get("network") if not (x in {None, ""})],
             'disks': [],
+            'tags': export_vm_tags(json_vm),
             'reverse': {
                 'reverse_type': 'VMwareOnprem',
                 'original_id': json_vm.get("_vimref"),

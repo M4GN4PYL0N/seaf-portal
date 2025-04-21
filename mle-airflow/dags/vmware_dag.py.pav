@@ -120,17 +120,16 @@ def vmware_dag():
     for config in configs.get("vcenters"):
        print("config", config)
        git_push_script = config["git_push_script"]
-       output = config["output"]
+       output_dir = config["output"]
        git_user = Variable.get(config["git_user"])
        git_token = Variable.get(config["git_token"])
        git_clone = config["git_clone"]
+       git_url = config["git_url"]
        git_project = config["git_project"]
        git_branch = config["git_branch"]
-       git_commit_user = config["git_commit_user"]
-       git_commit_email = config["git_commit_email"]
        bash_2run = BashOperator(
           task_id="git_push_" + config["vmhost"],
-          bash_command="{} {} {} {} {} {} {} {} {}".format(git_push_script, output, git_project, git_branch, git_user, git_token, git_clone, git_commit_user, git_commit_email)
+          bash_command="{} {} {} {} {} {} {} {}".format(git_push_script, output_dir, git_project, git_branch, git_user, git_token, git_clone,git_url)
        )
        bash_cmd_2run.append(bash_2run)
 

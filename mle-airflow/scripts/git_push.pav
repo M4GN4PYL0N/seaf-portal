@@ -1,0 +1,87 @@
+#!/bin/bash
+
+NOW=$( date '+%F_%H:%M:%S' )
+
+SOURCE_DIR=$1
+
+GIT_URL=git url
+GIT_PROJECT=$2
+#reverse
+GIT_BRANCH=$3
+#test
+GIT_USER=$4
+#root
+GIT_TOKEN=$5
+
+GIT_CLONE=$6
+GIT_USER_EMAIL='user@domain.local'
+GIT_USER_NAME='username'
+OUTPUT_DIR=$7
+
+echo "[DEBUG] - Folder is $SOURCE_DIR Project is $GIT_PROJECT Branch is $GIT_BRANCH Output dir $OUTPUT_DIR"
+echo "[DEBUG] - User $GIT_USER with $GIT_TOKEN will do clone $GIT_CLONE"
+pwd
+ls -la $SOURCE_DIR
+
+rm -r --force --interactive=never $GIT_PROJECT
+
+
+echo "[DEBUG] - Git -c http.sslVerify=false clone https://$GIT_USER:$GIT_TOKEN@$GIT_URL/$GIT_PROJECT.git -b $GIT_BRANCH ./$GIT_BRANCH"
+git -c http.sslVerify=false clone https://$GIT_USER:$GIT_TOKEN@$GIT_URL/$GIT_PROJECT.git -b $GIT_BRANCH ./$GIT_BRANCH
+
+#echo "[DEBUG] - cp -v -r -f $SOURCE_DIR/* ./$GIT_PROJECT"
+#cp -v -r -f $SOURCE_DIR/* ./$GIT_PROJECT
+
+cd ./$GIT_BRANCH
+echo "[DEBUG] - git config settings"
+git config http.sslVerify "false"
+git config user.email $GIT_USER_EMAIL
+git config user.name $GIT_USER_NAME
+git branch
+ls -la
+echo "[DEBUG] - git add --all"
+git add --all
+echo "[DEBUG] - git commit -m"
+git commit -m "airflow commit "$NOW
+echo "[DEBUG] - git push"
+git -c http.sslVerify=false push origin
+
+echo "# Проверяем статус ветки"
+echo "git_status=$(git status --branch)"
+git_status=$(git status --branch)
+echo "# Ищем строку с информацией о ветке"
+if grep -q "Your branch is up to date" <<< "$git_status"; then
+    echo "Your branch is up to date with $GIT_BRANCH"
+else
+    echo "Your branch $GIT_BRANCH is not up to date or there was an error."
+fi
+echo "# Получаем разницу между двумя последними коммитами"
+#echo "diff_output=$(git diff HEAD~2 HEAD~)"
+#diff_output=$(git diff HEAD~2 HEAD~)
+#echo # Выводим результат
+#echo "Изменения между двумя последними коммитами:"
+#echo "$diff_output"
+echo "git diff HEAD~2 HEAD~ | python3 /scripts/format_diff.py"
+git diff HEAD~2 HEAD~ | python3 /scripts/format_diff.py
+
+cd ..
+echo "[DEBUG] - cleanup rm -r --force --interactive=never $GIT_BRANCH"
+rm -r --force --interactive=never $GIT_BRANCH
+
+#which sendmail
+#echo $PATH
+#cp -r ./config/ssmtp/ /etc/
+
+#{
+#  echo "Subject: hello";
+#  echo "Content-Type: text/plain; charset=UTF-8";
+#  echo ""; # Пустая строка разделяет заголовки и тело письма
+#  echo "Test";
+#} | sendmail -v suksekov@mglk.ru
+
+#echo *** logs ***
+#mailq
+#tail maillog
+echo "[DEBUG] - python3 /scripts/do_mail.py"
+python3 /scripts/do_mail.py
+echo "[DEBUG] - *** EOF ***"

@@ -1,0 +1,25 @@
+{
+    "git": {
+        "push_script": "/scripts/git_push.sh",
+        "output_dir": "/var/lib/airflow/output"
+    },
+    "vcenters": [
+        {
+            "vmuser": "vmuser",
+            "vmpassword": "vmpassword",
+            "vmhost": "10.200.3.10",
+            "prefix": "company.prefix",
+            "location": "dc_id",
+            "dc_id": "dc_id",
+            "output": "/var/lib/airflow/output/vc1",
+            "git_push_script": "/scripts/git_push.sh",
+            "git_user": "git_user",
+            "git_token": "git_token",
+            "git_url": "url",
+            "git_clone": "git clone url",
+            "git_project": "projectname",
+            "git_branch": "branch name"
+        }
+    ],
+    "gigachat": {}
+}
