@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+containerPort: 8080
+
+env: []
+  # - name: ENV_NAME
+  #   value: "value"
+
+secrets: []
+  # - name: SECRET_NAME
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: my-secret
+  #       key: some-key
