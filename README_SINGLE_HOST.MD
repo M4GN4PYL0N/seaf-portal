@@ -60,8 +60,7 @@ git submodule init && git submodule update --recursive
 ```shell
 # Зададим наш домен
 DOMAIN=archportal.local
-# Создадим и перейдем в папку с сертификатами
-mkdir certs
+# Переходим в папку с сертификатами
 cd certs
 # Создадим конфигурационный файл
 cat > openssl.conf << EOF
