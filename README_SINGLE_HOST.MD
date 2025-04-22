@@ -17,11 +17,11 @@
 
 1. Добавьте в /etc/hosts адреса по которым будут доступны компоненты решения, пример ниже в таблице.
 
-| Контейнер    | FQDN (пример)             |
-|--------------|---------------------------|
-| seaf-backend | archportal.local          |
-| keycloak     | keycloak.archportal.local |
-| gitlab       | git.archportal.local      |
+| Контейнер                 | FQDN (пример)             |
+|---------------------------|---------------------------|
+| archportal.local          | 127.0.0.1                 |
+| keycloak.archportal.local | 127.0.0.1                 |
+| git.archportal.local      | 127.0.0.1                 |
 
 2. Настройте параметры логирования Docker
 
@@ -106,7 +106,7 @@ cp certs/server.crt certs/server.key ./reverse-proxy/certs
 
 Теперь у нас есть сертификаты и можно поднимать наши сервисы.
 
-6. Внесите созданные в п.1 адрес а в следующие конфигурационные файлы:
+6. Внесите созданные в п.1 адреса в следующие конфигурационные файлы:
 
 * ./docker-compose_single_host.yaml - в разделе настроек gitlab
 * ./keycloak/env/keycloak_single_host.env
