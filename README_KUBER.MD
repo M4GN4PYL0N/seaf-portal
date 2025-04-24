@@ -5,14 +5,13 @@
 
 2. Делаем build с указанием нужных env
 
-3. Полученный образ отправляем в наш registry
+3. Полученный образ выгружаем в ваш registry
 
-4. Качаем helm-chart здесь * *
-
-5. Выполняем установку
-helm install seaf-archportal ./seaf-archportal \
-  --set image.repository=your.registry/seaf-archportal \
-  --set image.tag=1.0.0
+5. Заходим в корень этого проекта и выполняем установку
+helm install seaf-archportal ./chart \
+  --namespace namespace \
+  --set image.repository=your_registry \
+  --set image.tag=your_tag
 
 6. Создаем пользователя archtool в **gitlab** и создаем ему токен (предполагается, что Gitlab у вас уже развернут)
 
@@ -32,5 +31,3 @@ VUE_APP_DOCHUB_GITLAB_URL=gitlab url
 VUE_APP_DOCHUB_PERSONAL_TOKEN=dochub_user_token
 VUE_APP_DOCHUB_ROOT_MANIFEST=gitlab project manifest
 ```
-
-10. Берем helm-chart здесь https://github.com/RabotaRu/helm-charts/tree/main/charts/dochub и меняем порт внутри deployment.yaml на 3030, также в values.yaml меняем порт внутри блока service на 3030
